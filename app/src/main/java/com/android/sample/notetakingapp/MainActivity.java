@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity
         //Declare the Fragment class
         NoteFragment noteFragments =  new NoteFragment();
 
-        //Create Bundle to get the data u want to pass
         // Replace the contents of the container with the new fragment
         fTraction.replace(R.id.notesFragment, noteFragments);
         // or ft.add(R.id.your_placeholder, new FooFragment());
@@ -233,7 +232,4 @@ public class MainActivity extends AppCompatActivity
         Log.v("EditorActivity", "onLoaderReset has been called");
     }
 
-    public interface DataFromActivityToFragment {
-        void sendData(String data);
-    }
 }
