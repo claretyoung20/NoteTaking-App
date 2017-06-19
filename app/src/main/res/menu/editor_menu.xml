@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/saveNote"
+        android:icon="@drawable/ic_done"
+        android:title="Item"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/shareNote"
+        android:title="Item"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_menu_share"/>
+    <item
+        android:id="@+id/noteDetail"
+        android:title="Detail" />
+    <item
+        android:id="@+id/deleteNote"
+        android:title="Delete" />
+</menu>
