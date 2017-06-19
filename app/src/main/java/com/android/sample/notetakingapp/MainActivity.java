@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.sample.notetakingapp.dataModel.NoteContract.*;
 import com.android.sample.notetakingapp.dataModel.NoteContract.CategoryEntry;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     TextView manageCat;
     Menu m;
+
+
+
     private static final int NOTE_LOADER = 0;
 
     @Override
@@ -64,6 +68,23 @@ public class MainActivity extends AppCompatActivity
 
         m = navigationView.getMenu();
         m.clear();
+
+        // Begin the transaction
+        FragmentTransaction fTraction = getSupportFragmentManager().beginTransaction();
+        //Declare the Fragment class
+        NoteFragment noteFragments =  new NoteFragment();
+
+        //Create Bundle to get the data u want to pass
+        Bundle bundles = new Bundle();
+        //add the argument to bundle
+        bundles.putInt(NoteEntry.COLUMN_CATEGORY_ID, 0);
+        //Set the fragmentClass Argument
+        noteFragments.setArguments(bundles);
+        // Replace the contents of the container with the new fragment
+        fTraction.replace(R.id.notesFragment, noteFragments);
+        // or ft.add(R.id.your_placeholder, new FooFragment());
+        // Complete the changes added above
+        fTraction.commit();
 
         //getContentResolver().delete(NoteEntry.NOTE_CONTENT_URI,null,null);
         getLoaderManager().initLoader(NOTE_LOADER, null, this);
@@ -109,6 +130,9 @@ public class MainActivity extends AppCompatActivity
         int catId = 1;
         String name = "";
 
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
 //         Define a projection that specifies which columns from the database
 //         you will actually use after this query.
         String[] projection = {
@@ -120,19 +144,24 @@ public class MainActivity extends AppCompatActivity
             name = cursors.getString(cursors.getColumnIndex(CategoryEntry.COLUMN_CATEGORY_NAME));
             catId = cursors.getInt(cursors.getColumnIndex(CategoryEntry._ID));
 
-            // Handle navigation view item clicks here.
-            int id = item.getItemId();
+            // Begin the transaction
+            FragmentTransaction ft =    getSupportFragmentManager().beginTransaction();
+            //Declare the Fragment class
+            NoteFragment noteFragment =  new NoteFragment();
+
+            //Create Bundle to get the data u want to pass
+            Bundle bundle = new Bundle();
 
             if (id == catId) {
                 Toast.makeText(this, name + ": " + catId, Toast.LENGTH_LONG).show();
-                // Begin the transaction
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                //add the argument to bundle
+                bundle.putInt(NoteEntry.COLUMN_CATEGORY_ID, catId);
+                //Set the fragmentClass Argument
+                noteFragment.setArguments(bundle);
                 // Replace the contents of the container with the new fragment
-                NoteFragment noteFragment =  new NoteFragment();
                 ft.replace(R.id.notesFragment, noteFragment);
                 // or ft.add(R.id.your_placeholder, new FooFragment());
                 // Complete the changes added above
-
                 ft.commit();
             }
 

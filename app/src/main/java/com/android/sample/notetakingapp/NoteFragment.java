@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,9 @@ import com.android.sample.notetakingapp.dataModel.NoteContract.NoteEntry;
 public class NoteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     NoteCursorAdapter noteCursorAdapter;
     private static final int NOTE_LOADER = 1;
+
+    int category_ID = 0;
+
     public NoteFragment() {
     }
 
@@ -34,6 +36,9 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
 
         noteCursorAdapter = new NoteCursorAdapter(getContext(), null);
         listView.setAdapter(noteCursorAdapter);
+
+        Bundle bundle = this.getArguments();
+        category_ID = bundle.getInt(NoteEntry.COLUMN_CATEGORY_ID);
 
         getLoaderManager().initLoader(NOTE_LOADER, null,this);
         // Inflate the layout for this fragment
@@ -52,25 +57,19 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
                 NoteEntry.COLUMN_CATEGORY_ID
         };
 
-        return new CursorLoader(getContext(),NoteEntry.NOTE_CONTENT_URI,projection,null,null,null);
+        if(category_ID == 0){
+            return new CursorLoader(getContext(),NoteEntry.NOTE_CONTENT_URI,projection,null,null,null);
+        }else{
+            String selection = NoteEntry.COLUMN_CATEGORY_ID +"=?";
+            String[] selectionArg = new String[]{String.valueOf(category_ID)};
+            return new CursorLoader(getContext(),NoteEntry.NOTE_CONTENT_URI,projection,selection,selectionArg,null);
+        }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data == null || data.getCount() < 0) {
             return;
-        }
-
-        while (data.moveToNext()) {
-            int nTitle = data.getInt(data.getColumnIndex(NoteEntry.COLUMN_NOTE_ID));
-            int categoryID = data.getInt(data.getColumnIndex(NoteEntry.COLUMN_CATEGORY_ID));
-            String title = data.getString(data.getColumnIndex(NoteEntry.COLUMN_NOTE_TITLE));
-            String nBody = data.getString(data.getColumnIndex(NoteEntry.COLUMN_NOTE_BODY));
-
-            Log.v("NOTE ID   ",""+nTitle);
-            Log.v("CATEGORY ID  ",""+categoryID);
-            Log.v("TITLE  ",title);
-            Log.v("BODY  ",nBody);
         }
         noteCursorAdapter.swapCursor(data);
     }
