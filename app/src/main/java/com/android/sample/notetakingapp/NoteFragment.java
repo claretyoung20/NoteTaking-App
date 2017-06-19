@@ -1,10 +1,14 @@
 package com.android.sample.notetakingapp;
 
 
+import android.content.ContentUris;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -12,6 +16,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.sample.notetakingapp.dataModel.NoteContract.NoteEntry;
@@ -28,6 +33,8 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
     public static final String Name = "nameKey";
     int category_ID = 0;
 
+    private ListView listView;
+
     public NoteFragment() {
     }
 
@@ -36,7 +43,7 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
 
         View viewLayout = inflater.inflate(R.layout.fragment_container,container,false);
-        ListView listView = (ListView) viewLayout.findViewById(R.id.list_note_view);
+         listView = (ListView) viewLayout.findViewById(R.id.list_note_view);
 
         noteCursorAdapter = new NoteCursorAdapter(getContext(), null);
         listView.setAdapter(noteCursorAdapter);
@@ -44,9 +51,35 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         category_ID = sharedPreferences.getInt(Name,0) ;
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), NoteEditor.class);
+                // Form the content URI that represents the specific pet that was clicked on,
+                // by appending the "id" (passed as input to this method) onto the
+                // {@link PetEntry#CONTENT_URI}.
+                // For example, the URI would be "content://com.example.android.pets/pets/2"
+                // if the pet with ID 2 was clicked on.
+                Uri currentPetUri = ContentUris.withAppendedId(NoteEntry.NOTE_CONTENT_URI,id);
+
+                // Set the URI on the data field of the intent
+                intent.setData(currentPetUri);
+
+                // Launch the {@link EditorActivity} to display the data for the current pet.
+                startActivity(intent);
+            }
+        });
+
         getLoaderManager().initLoader(NOTE_LOADER, null,this);
+
         // Inflate the layout for this fragment
         return viewLayout;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override

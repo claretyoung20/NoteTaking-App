@@ -13,7 +13,8 @@
         android:name="com.android.sample.notetakingapp.NotesFragment"
         android:id="@+id/notesFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants">
     </FrameLayout>
 
     <include
@@ -38,7 +39,7 @@
             android:background="?attr/colorButtonNormal"
             android:gravity="center"
             android:text="MANAGE CATEGORIES" />
-
     </android.support.design.widget.NavigationView>
+
 
 </android.support.v4.widget.DrawerLayout>
