@@ -5,9 +5,11 @@ import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +24,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.sample.notetakingapp.dataModel.NoteContract.*;
 import com.android.sample.notetakingapp.dataModel.NoteContract.CategoryEntry;
 
 import java.text.SimpleDateFormat;
@@ -36,7 +37,10 @@ public class MainActivity extends AppCompatActivity
     TextView manageCat;
     Menu m;
 
-
+    //declare SharedPreferences
+    SharedPreferences sharedpreferences;
+    //constant values for sharedpreferences name and key
+    public static final String Name = "nameKey";
 
     private static final int NOTE_LOADER = 0;
 
@@ -69,17 +73,14 @@ public class MainActivity extends AppCompatActivity
         m = navigationView.getMenu();
         m.clear();
 
+        //sharedpreferences
+        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         // Begin the transaction
         FragmentTransaction fTraction = getSupportFragmentManager().beginTransaction();
         //Declare the Fragment class
         NoteFragment noteFragments =  new NoteFragment();
 
         //Create Bundle to get the data u want to pass
-        Bundle bundles = new Bundle();
-        //add the argument to bundle
-        bundles.putInt(NoteEntry.COLUMN_CATEGORY_ID, 0);
-        //Set the fragmentClass Argument
-        noteFragments.setArguments(bundles);
         // Replace the contents of the container with the new fragment
         fTraction.replace(R.id.notesFragment, noteFragments);
         // or ft.add(R.id.your_placeholder, new FooFragment());
@@ -149,15 +150,12 @@ public class MainActivity extends AppCompatActivity
             //Declare the Fragment class
             NoteFragment noteFragment =  new NoteFragment();
 
-            //Create Bundle to get the data u want to pass
-            Bundle bundle = new Bundle();
-
             if (id == catId) {
                 Toast.makeText(this, name + ": " + catId, Toast.LENGTH_LONG).show();
-                //add the argument to bundle
-                bundle.putInt(NoteEntry.COLUMN_CATEGORY_ID, catId);
-                //Set the fragmentClass Argument
-                noteFragment.setArguments(bundle);
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putInt(Name,catId);
+                editor.commit();
                 // Replace the contents of the container with the new fragment
                 ft.replace(R.id.notesFragment, noteFragment);
                 // or ft.add(R.id.your_placeholder, new FooFragment());

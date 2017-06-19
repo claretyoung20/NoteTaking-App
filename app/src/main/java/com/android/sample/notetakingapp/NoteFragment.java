@@ -1,8 +1,10 @@
 package com.android.sample.notetakingapp;
 
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,9 +21,11 @@ import com.android.sample.notetakingapp.dataModel.NoteContract.NoteEntry;
  */
 
 public class NoteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
     NoteCursorAdapter noteCursorAdapter;
     private static final int NOTE_LOADER = 1;
-
+    //sharedpreferences key
+    public static final String Name = "nameKey";
     int category_ID = 0;
 
     public NoteFragment() {
@@ -37,8 +41,8 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
         noteCursorAdapter = new NoteCursorAdapter(getContext(), null);
         listView.setAdapter(noteCursorAdapter);
 
-        Bundle bundle = this.getArguments();
-        category_ID = bundle.getInt(NoteEntry.COLUMN_CATEGORY_ID);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        category_ID = sharedPreferences.getInt(Name,0) ;
 
         getLoaderManager().initLoader(NOTE_LOADER, null,this);
         // Inflate the layout for this fragment

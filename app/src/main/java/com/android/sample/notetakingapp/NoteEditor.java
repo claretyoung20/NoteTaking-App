@@ -7,9 +7,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -44,6 +46,9 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
 
     private final int EXISTING_NOTE_LOADER = 0;
 
+    /** sharedpreferences key */
+    public static final String Name = "nameKey";
+
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mCurrentNoteUri boolean to true.
@@ -61,16 +66,18 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
 
+        //get haredpreferences key
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        categoryID = sharedPreferences.getInt(Name,1) ;
+
         // Examine the intent that was used to launch this activity,
         // in order to figure out if we're creating a new Note or editing an existing one.
         Intent intent = getIntent();
         mCurrentNoteUri = intent.getData();
-
         // If the intent DOES NOT contain a Note content URI, then we know that we are
         // creating a new Note.
         if (mCurrentNoteUri == null) {
-            Intent intentID = getIntent();
-           // categoryID = getIntent().getIntExtra("categoryId", 1);
+
             // This is a new Note, so change the app bar to say "Add a Pet"
             setTitle("Add Note");
 
@@ -277,7 +284,7 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
         values.put(NoteEntry.COLUMN_NOTE_BODY, noteContent);
         values.put(NoteEntry.COLUMN_NOTE_DATE, dateString);
         values.put(NoteEntry.COLUMN_NOTE_TIME, timeString);
-        values.put(NoteEntry.COLUMN_CATEGORY_ID, 1);
+        values.put(NoteEntry.COLUMN_CATEGORY_ID, categoryID);
 
         //check if it is new note or existing note
         if (mCurrentNoteUri == null) {
