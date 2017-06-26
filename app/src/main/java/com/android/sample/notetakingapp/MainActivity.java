@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.sample.notetakingapp.dataModel.NoteContract.CategoryEntry;
 
@@ -129,6 +128,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int catId = 1;
         String name = "";
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        // Begin the transaction
+        FragmentTransaction ft =    getSupportFragmentManager().beginTransaction();
+        //Declare the Fragment class
+        NoteFragment noteFragment =  new NoteFragment();
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -144,15 +148,9 @@ public class MainActivity extends AppCompatActivity
             name = cursors.getString(cursors.getColumnIndex(CategoryEntry.COLUMN_CATEGORY_NAME));
             catId = cursors.getInt(cursors.getColumnIndex(CategoryEntry._ID));
 
-            // Begin the transaction
-            FragmentTransaction ft =    getSupportFragmentManager().beginTransaction();
-            //Declare the Fragment class
-            NoteFragment noteFragment =  new NoteFragment();
-
             if (id == catId) {
-                Toast.makeText(this, name + ": " + catId, Toast.LENGTH_LONG).show();
-
-                SharedPreferences.Editor editor = sharedpreferences.edit();
+                setTitle(name);
+               // Toast.makeText(this, name + ": " + catId, Toast.LENGTH_LONG).show();
                 editor.putInt(Name,catId);
                 editor.commit();
                 // Replace the contents of the container with the new fragment
@@ -162,6 +160,16 @@ public class MainActivity extends AppCompatActivity
                 ft.commit();
             }
 
+        }
+        if(id == 0){
+            setTitle("All Notes");
+            editor.putInt(Name,0);
+            editor.commit();
+            // Replace the contents of the container with the new fragment
+            ft.replace(R.id.notesFragment, noteFragment);
+            // or ft.add(R.id.your_placeholder, new FooFragment());
+            // Complete the changes added above
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -211,6 +219,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        MenuItem menuItem1 =m.add(R.id.groupID, 0, 0, "All Notes");
+        menuItem1.setIcon(R.drawable.ic_menu_folder);
         /*---------Manually adding menu---------*/
         while (data.moveToNext()) {
             String cateName = data.getString(data.getColumnIndex(CategoryEntry.COLUMN_CATEGORY_NAME));
@@ -221,7 +232,6 @@ public class MainActivity extends AppCompatActivity
             MenuItem menuItem = m.add(R.id.groupID, cateID, cateID, cateName);
             menuItem.setIcon(R.drawable.ic_menu_folder);
         }
-        Log.v("EditorActivity", "onLoadFinished has been called");
 
     }
 
@@ -233,7 +243,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onImageSelected(Uri path) {
+    public void onItemSelected(Uri path) {
         Intent intent = new Intent(this,NoteEditor.class);
         intent.setData(path);
         startActivity(intent);

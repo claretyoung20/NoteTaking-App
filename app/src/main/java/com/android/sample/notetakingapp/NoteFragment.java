@@ -41,7 +41,7 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
 
     // OnImageClickListener interface, calls a method in the host activity named onImageSelected
     public interface OnItemClickListener {
-        void onImageSelected(Uri path);
+        void onItemSelected(Uri path);
     }
 
     // Override onAttach to make sure that the container activity has implemented the callback
@@ -86,7 +86,7 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
                 // if the note with ID 2 was clicked on.
                 Uri currentNoteUri = ContentUris.withAppendedId(NoteEntry.NOTE_CONTENT_URI,id);
 
-              mCallback.onImageSelected(currentNoteUri);
+              mCallback.onItemSelected(currentNoteUri);
             }
         });
 
