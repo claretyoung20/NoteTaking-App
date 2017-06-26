@@ -78,14 +78,14 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
         // creating a new Note.
         if (mCurrentNoteUri == null) {
 
-            // This is a new Note, so change the app bar to say "Add a Pet"
+            // This is a new Note, so change the app bar to say "Add a Note"
             setTitle("Add Note");
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a Note that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
-            // Otherwise this is an existing Note, so change app bar to say "Edit Pet"
+            // Otherwise this is an existing Note, so change app bar to say "Edit Note"
             setTitle("Edit Note");
 
             // Initialize a loader to read the Note data from the database
@@ -150,7 +150,7 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // User clicked the "Keep editing" button, so dismiss the dialog
-                // and continue editing the pet.
+                // and continue editing the Notes.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -164,7 +164,7 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
 
     @Override
     public void onBackPressed() {
-        // If the pet hasn't changed, continue with handling back button press
+        // If the Note hasn't changed, continue with handling back button press
         if (!mNoteHasChanged) {
             super.onBackPressed();
             return;

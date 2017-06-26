@@ -285,7 +285,7 @@ public class NoteProvider extends ContentProvider {
 
     /**
      * Update note in the database with the given content values. Apply the changes to the rows
-     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * specified in the selection and selection arguments (which could be 0 or 1 or more notes).
      * Return the number of rows that were successfully updated.
      */
     public int updateNote(Uri uri, ContentValues values, String selection, String[] selectionArgs) {

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/listHeight"
-    android:clickable="true"
+    android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
@@ -16,9 +16,10 @@
         android:layout_marginLeft="23dp"
         android:layout_marginStart="23dp"
         android:layout_marginTop="17dp"
-        android:focusable="false"
         android:text="Title"
         android:textSize="18sp"
+        android:focusable="false"
+        android:clickable="false"
         android:textStyle="bold" />
 
     <TextView
@@ -31,6 +32,7 @@
         android:layout_marginTop="14dp"
         android:text="Content Some part of the main..."
         android:focusable="false"
+        android:clickable="false"
         android:textSize="16sp" />
 
     <TextView
@@ -44,5 +46,6 @@
         android:layout_marginRight="18dp"
         android:text="June 13, 2017"
         android:textStyle="bold"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:clickable="false"/>
 </RelativeLayout>

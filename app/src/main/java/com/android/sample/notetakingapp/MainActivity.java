@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
+        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>,NoteFragment.OnItemClickListener {
 
 
     NavigationView navigationView;
@@ -232,4 +232,10 @@ public class MainActivity extends AppCompatActivity
         Log.v("EditorActivity", "onLoaderReset has been called");
     }
 
+    @Override
+    public void onImageSelected(Uri path) {
+        Intent intent = new Intent(this,NoteEditor.class);
+        intent.setData(path);
+        startActivity(intent);
+    }
 }

@@ -26,6 +26,8 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         noteTable(db);
     }
 
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

@@ -46,13 +46,13 @@ public class NoteContract {
         public static final String COLUMN_CATEGORY_TIME = "cat_time";
 
         /**
-         * The MIME type of the {@link #CATEGORY_CONTENT_URI} for a list of pets.
+         * The MIME type of the {@link #CATEGORY_CONTENT_URI} for a list of Notes.
          */
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
 
         /**
-         * The MIME type of the {@link #CATEGORY_CONTENT_URI} for a single pet.
+         * The MIME type of the {@link #CATEGORY_CONTENT_URI} for a single Note.
          */
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
@@ -72,13 +72,13 @@ public class NoteContract {
         public static final String COLUMN_CATEGORY_ID = "note_category_id";
 
         /**
-         * The MIME type of the {@link #NOTE_CONTENT_URI} for a list of pets.
+         * The MIME type of the {@link #NOTE_CONTENT_URI} for a list of Notes.
          */
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_NOTE;
 
         /**
-         * The MIME type of the {@link #NOTE_CONTENT_URI} for a single pet.
+         * The MIME type of the {@link #NOTE_CONTENT_URI} for a single Notes.
          */
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_NOTE;

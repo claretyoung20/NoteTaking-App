@@ -2,6 +2,7 @@ package com.android.sample.notetakingapp;
 
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -35,6 +36,29 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private ListView listView;
 
+    // Define a new interface OnImageClickListener that triggers a callback in the host activity
+    OnItemClickListener mCallback;
+
+    // OnImageClickListener interface, calls a method in the host activity named onImageSelected
+    public interface OnItemClickListener {
+        void onImageSelected(Uri path);
+    }
+
+    // Override onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mCallback = (OnItemClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnImageClickListener");
+        }
+    }
+
     public NoteFragment() {
     }
 
@@ -55,20 +79,18 @@ public class NoteFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), NoteEditor.class);
-                // Form the content URI that represents the specific pet that was clicked on,
+                // Form the content URI that represents the specific Note that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(NoteEntry.NOTE_CONTENT_URI,id);
+                // {@link NoteEntry#CONTENT_URI}.
+                // For example, the URI would be "com.android.sample.notetakingapp/notes/2"
+                // if the note with ID 2 was clicked on.
+                Uri currentNoteUri = ContentUris.withAppendedId(NoteEntry.NOTE_CONTENT_URI,id);
 
-                // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
-
-                // Launch the {@link EditorActivity} to display the data for the current pet.
-                startActivity(intent);
+              mCallback.onImageSelected(currentNoteUri);
             }
         });
+
+        listView.setEnabled(true);
 
         getLoaderManager().initLoader(NOTE_LOADER, null,this);
 
