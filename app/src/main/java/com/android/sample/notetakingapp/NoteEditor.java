@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
 
     private EditText title, body;
 
+    public String shareTitle = null;
+    public String shareText = "";
     /**
      * Content URI for the existing Note (null if it's a new Note)
      */
@@ -131,6 +134,8 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
 
             body.setText(nBody);
             title.setText(nTitle);
+            shareTitle = nTitle;
+            shareText = nBody;
         }
     }
 
@@ -226,7 +231,7 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
                 return true;
 
             case R.id.shareNote:
-                //do something
+                shareQuote();
                 return true;
 
             case R.id.deleteNote:
@@ -380,13 +385,10 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
             LayoutInflater inflater = this.getLayoutInflater();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
             View viewBuilder = inflater.inflate(R.layout.note_detail, null);
             builder.setView(viewBuilder);
-
 
             TextView header = (TextView) viewBuilder.findViewById(R.id.nTitle);
             TextView noteTitle = (TextView) viewBuilder.findViewById(R.id.txtTiles);
@@ -394,7 +396,7 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
             TextView noteTime = (TextView) viewBuilder.findViewById(R.id.txtTime);
             TextView noteLength = (TextView) viewBuilder.findViewById(R.id.txtNum);
 
-            header.setText(noteTitle + "Detail");
+            header.setText(nTitle + " Details");
             noteTitle.setText(nTitle);
             noteDate.setText(nDate);
             noteTime.setText(nTime);
@@ -404,6 +406,14 @@ public class NoteEditor extends AppCompatActivity implements LoaderManager.Loade
 
             AlertDialog alert = builder.create();
             alert.show();
+        }
+    }
+
+    public void shareQuote(){
+        if(shareText != null) {
+            String M_TYPE = "text/plain";
+            String tTile = "Share this note via..";
+            ShareCompat.IntentBuilder.from(this).setChooserTitle(tTile).setType(M_TYPE).setText(shareTitle +"\n"+ shareText).startChooser();
         }
     }
 
