@@ -269,6 +269,7 @@ public class ManageCategory extends AppCompatActivity implements LoaderManager.L
 
                 if (TextUtils.isEmpty(categoryName)) {
                     dialog.dismiss();
+                    return;
                 }
 
                 //Date
